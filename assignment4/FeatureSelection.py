@@ -55,7 +55,7 @@ def parse_samples(file_name):
     matrix = sparse.coo_matrix((data, (row, col)), shape=(11269, 61188)).toarray()
     return matrix
 
-def cocat(labels, matrix):
+def concat(labels, matrix):
     return np.c_[labels, matrix]
 
 def get_range(labels):
@@ -101,7 +101,7 @@ def calc_attr_entropy(result):
     entropy = appear_N / total * entropy1 + non_appear_N / total * entropy2
     return entropy
 
-def cal_info_gains(matrix, ranges):
+def calc_info_gains(matrix, ranges):
     pqueue = Q.PriorityQueue()
     start = ranges[0]
     end = ranges[1]
@@ -147,9 +147,9 @@ def get_top_100_feature(pqueue):
 def select_features(sample_file_name, label_file_name):
     labels = parse_labels(label_file_name)
     matrix = parse_samples(sample_file_name)
-    matrix_with_label = cocat(labels, matrix)
+    matrix_with_label = concat(labels, matrix)
     ranges = get_range(labels)
-    pqueue = cal_info_gains(matrix_with_label, ranges)
+    pqueue = calc_info_gains(matrix_with_label, ranges)
     features = get_top_100_feature(pqueue)
     return features
 
